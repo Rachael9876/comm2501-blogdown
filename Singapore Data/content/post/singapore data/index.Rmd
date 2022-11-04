@@ -1,0 +1,43 @@
+---
+title: "Singapore Data"
+author: "Rachael"
+date: 2020-12-01T21:13:14-05:00
+categories: ["R"]
+tags: ["R Markdown", "plot", "regression"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+This blog post is about Singapore's GDP and its relationship with life expectancy of its population.
+
+```{r Import libraries, message=FALSE, warning=FALSE, include=FALSE}
+
+library(dplyr)
+
+```
+
+```{r Import data, message=FALSE, warning=FALSE, include=FALSE}
+setwd("~/Desktop")
+
+imported_data<-read.csv("~/Desktop/singapore.data.csv",header=TRUE)
+
+data<-data.frame(t(imported_data[-1]))
+
+data1<-data %>% filter(!row_number() %in% c(3:33))
+
+data2<-data1 %>% select(X4,X7,X13,X28,X64,X314,X371,X523,X528,X1098,X1164,X1165,X1167,X1219,X1278)
+
+colnames(data2)<-c("year","unemployment.total","female.labourforce","gdp.per.person.employed","labourforce.total","mortality.rate.under.5","gross.savings.percentage","gross.domestic.savings","gdp","population.growth","female.survival.to.65","life.expectancy.at.birth.female","mortality.rate.male.adult,per1000","life.expectancy.at.birth","life.expectancy.at.birth.male")
+
+```
+
+```{r Create visual, echo=FALSE, message=FALSE, warning=FALSE}
+plot(data2$year,data2$gdp,main="Singapore's GDP from 1990  to 2021", xlab="Year", ylab="GDP in USD",col="red",type="l")
+
+plot(data2$year,data2$life.expectancy.at.birth,main="Life Expectancy in Singapore", xlab="Year", ylab="GDP in USD",col="blue",type="l")
+points(data2$year,data2$life.expectancy.at.birth.female,type="l",col="red")
+points(data2$year,data2$life.expectancy.at.birth.male,type="l",col="green")
+legend('bottomright',legend=c("Average","Female","Male"),col=c("blue","red","green"),lwd=4)
+```
